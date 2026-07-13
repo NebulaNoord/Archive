@@ -54,8 +54,8 @@ export const projects: Project[] = [
   {
     name: 'ShiftSync',
     description:
-      'My first project, so the UI is rough — but it works. Logs work shifts, tracks hours, and calculates net pay.',
-    technologies: ['HTML', 'CSS', 'JavaScript'],
+      'My first project — where I first learned to track real data and build a working UI from scratch. Logs work shifts, tracks hours, and calculates net pay.',
+    technologies: ['HTML', 'CSS', 'JavaScript', 'TypeScript'],
     features: ['Shift logging', 'Hours tracker', 'Net pay calculator'],
     link: 'https://shiftsyncyt.vercel.app/',
     year: 2024,
@@ -72,7 +72,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Pythonix',
-    description: 'My first game, so the UI is a little rough — but it plays. Launched separately from Archive.',
+    description: 'My very first game — rough around the edges, but it genuinely plays. Launched separately from Archive.',
     technologies: ['Python', 'Game development'],
     features: ['Launcher entry', 'External play', 'First game'],
     link: 'https://pythonix.vercel.app/',
@@ -93,7 +93,7 @@ export const games: Game[] = [
   {
     name: 'Pythonix',
     icon: 'PX',
-    description: 'My first game, so the UI is a little rough — but it plays. Archive launches it externally.',
+    description: 'My very first game — rough around the edges, but it genuinely plays. Archive launches it externally.',
     technologies: ['Python', 'Game logic'],
     status: 'Live',
     link: 'https://pythonix.vercel.app/',
