@@ -6,6 +6,12 @@ type Project = {
   link: string
   year?: number
   live?: boolean
+  tagline: string
+  goal: string
+  challenge: string
+  solution: string
+  outcome: string
+  role: string
 }
 
 type Game = {
@@ -24,9 +30,15 @@ type SkillCategory = {
 
 export const profile = {
   name: 'Kayden',
+  studio: 'NebulaNoord',
+  studioDesc: 'Independent Design & Development Studio',
   location: 'Alberta, Canada',
-  roles: ['Frontend Developer', 'Student'],
-  bio: 'Frontend developer and student from Alberta, Canada, creating interactive web experiences with React, TypeScript, and Vite. My work ranges from productivity applications and dashboards to games and experimental projects, with a focus on clean design, intuitive user interfaces, and maintainable code.',
+  roles: ['Founder', 'Frontend Developer', 'Student'],
+  // Short site intro (hero support line) — direct, human, no buzzwords.
+  intro:
+    'I design and build fast, interactive websites that help brands stand out through thoughtful design and memorable user experiences.',
+  // About NebulaNoord + personal intro (About section).
+  bio: "NebulaNoord is an independent design and development studio focused on creating modern, interactive websites that leave a lasting impression. Founded by Kayden, the studio combines thoughtful design, performance, and creative development to build sites that are both visually distinctive and enjoyable to use. I enjoy building websites that balance personality with usability — most projects start with a strong visual direction, then I spend just as much time on how people actually move through a site and what makes an experience stick.",
   interests: ['React', 'TypeScript', 'UI/UX', 'Web applications', 'Game development'],
   hobbies: ['Cities: Skylines II', 'Hot Wheels collecting', 'Formula 1', 'Exploring new tech'],
 }
@@ -34,8 +46,14 @@ export const profile = {
 export const projects: Project[] = [
   {
     name: 'Maze Runner',
+    tagline: 'A 999-level pixel-art maze game that runs smoothly on any phone.',
     description:
       'A retro pixel-art maze game with teleport portals — 999 procedurally generated levels, coin collection, a skin shop, mobile controls, and saved progress.',
+    goal: 'Build a maze game with endless replay value that feels good on both desktop and mobile.',
+    challenge: '999 unique levels meant hand-design was impossible — the game had to generate, render, and stay fast on low-end phones.',
+    solution: 'Wrote a level generator with seeded randomness and portals, plus a touch control scheme and localStorage saves so progress never resets.',
+    outcome: 'Runs at a smooth frame rate with 999 generated levels, a working skin shop, and progress that survives refreshes.',
+    role: 'Solo — design, game logic, UI, mobile controls',
     technologies: ['HTML', 'CSS', 'JavaScript'],
     features: ['999 generated levels', 'Teleport portals', 'Coin collection', 'Skin shop', 'Mobile controls', 'Saved progress'],
     link: 'https://mazeerunner.vercel.app/',
@@ -44,7 +62,13 @@ export const projects: Project[] = [
   },
   {
     name: 'CadenCeTyper',
+    tagline: 'A typing test where you can see your rank against everyone else live.',
     description: 'A typing speed test with a global leaderboard and live ranking.',
+    goal: 'Make practicing typing feel competitive instead of like a homework drill.',
+    challenge: 'A leaderboard is only fun if it updates in real time and never feels fake or laggy.',
+    solution: 'Built a live ranking system that recalculates WPM instantly and shows your position against other players as you type.',
+    outcome: 'A fast, satisfying test with a global leaderboard that updates live — people keep coming back to climb it.',
+    role: 'Solo — frontend, ranking logic, UI',
     technologies: ['HTML', 'CSS', 'JavaScript'],
     features: ['WPM test', 'Global leaderboard', 'Live ranking'],
     link: 'https://cadencetyper.vercel.app/',
@@ -53,8 +77,14 @@ export const projects: Project[] = [
   },
   {
     name: 'ShiftSync',
+    tagline: 'My first real project — tracking work hours and turning them into net pay.',
     description:
       'My first project — where I first learned to track real data and build a working UI from scratch. Logs work shifts, tracks hours, and calculates net pay.',
+    goal: 'Track my own work shifts and actually know what I take home after deductions.',
+    challenge: 'It was my first build, so everything — layout, state, math — was new. The UI had to stay usable while I learned.',
+    solution: 'Started simple: log a shift, store the hours, calculate pay with a clear breakdown. Focused on getting real numbers right before anything fancy.',
+    outcome: 'A working shift logger that tracks hours and calculates net pay — and the project where I learned to build a real UI.',
+    role: 'Solo — first project, built from scratch',
     technologies: ['HTML', 'CSS', 'JavaScript', 'TypeScript'],
     features: ['Shift logging', 'Hours tracker', 'Net pay calculator'],
     link: 'https://shiftsyncyt.vercel.app/',
@@ -63,18 +93,30 @@ export const projects: Project[] = [
   },
   {
     name: 'Nebula Noord',
-    description: "My company's website — the professional home of Nebula Noord.",
-    technologies: ['Web', 'Responsive design', 'UI/UX'],
-    features: ['Company site', 'External link', 'Brand presence'],
+    tagline: "The studio site — proof a one-person brand can look like an agency.",
+    description: "The studio's own website — the professional home of Nebula Noord.",
+    goal: 'Give the studio a recognizable, premium home that sells the work without saying too much.',
+    challenge: 'It had to feel like a real creative studio, not a personal résumé, while staying honest about being a one-person business.',
+    solution: 'Built a bold editorial identity with two interfaces — a maximalist site and a retro OS easter egg — under one brand.',
+    outcome: 'A site that reads as a boutique studio, with a distinctive look clients remember.',
+    role: 'Founder — design, development, brand',
+    technologies: ['React', 'TypeScript', 'Vite', 'Tailwind'],
+    features: ['Studio site', 'Two interfaces', 'Brand identity'],
     link: 'https://nebulanoord.vercel.app/',
     year: 2026,
     live: true,
   },
   {
     name: 'Pythonix',
+    tagline: 'My very first game — a playable snake built before I knew frameworks.',
     description: 'My very first game — rough around the edges, but it genuinely plays. Launched separately from Archive.',
+    goal: 'Make an actual game from scratch and learn what game development feels like.',
+    challenge: 'No engine, no framework — just logic, a loop, and figuring out collision and input myself.',
+    solution: 'Built the snake in Python with a simple game loop and keyboard controls, then shipped it as a standalone launcher.',
+    outcome: 'A fully playable game and the starting point that got me into building web experiences.',
+    role: 'Solo — first game, built from scratch',
     technologies: ['Python', 'Game development'],
-    features: ['Launcher entry', 'External play', 'First game'],
+    features: ['Playable game', 'External launcher', 'First game'],
     link: 'https://pythonix.vercel.app/',
     year: 2024,
     live: true,
@@ -106,6 +148,29 @@ export const games: Game[] = [
     status: 'Coming later',
     link: '#',
   },
+]
+
+export const process: { step: string; title: string; body: string }[] = [
+  { step: '01', title: 'Discover', body: 'Learn about your project, goals, audience, and what success looks like.' },
+  { step: '02', title: 'Design', body: 'Develop the visual direction and user experience — layout, type, and motion that fit your brand.' },
+  { step: '03', title: 'Develop', body: 'Build a responsive, performant website with clean, maintainable code.' },
+  { step: '04', title: 'Launch', body: 'Test, optimize for speed and accessibility, then deploy and hand over.' },
+]
+
+export const services: string[] = [
+  'Custom Business Websites',
+  'Portfolio Websites',
+  'Landing Pages',
+  'Frontend Development',
+  'Website Refreshes',
+  'Interactive Experiences',
+]
+
+export const trust: { label: string; value: string }[] = [
+  { label: 'Stack', value: 'TypeScript · React · Vite · Tailwind' },
+  { label: 'Typical build', value: '1–3 weeks, depending on scope' },
+  { label: 'Performance', value: '~65 kB initial JS · built for speed' },
+  { label: 'Accessibility', value: 'Semantic markup · reduced-motion aware' },
 ]
 
 export const skills: string[] = [
