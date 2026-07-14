@@ -214,11 +214,6 @@ function RetroCTA({ onSwitch }: { onSwitch: () => void }) {
 }
 
 function Contact() {
-  const socials = [
-    { label: 'GITHUB', href: contact.github, live: true },
-    { label: 'LINKEDIN', href: contact.linkedin, live: false },
-    { label: 'TWITTER / X', href: contact.twitter, live: false },
-  ]
   return (
     <section id="contact" className="relative px-6 py-32 md:px-20">
       <SectionHeading>CONTACT</SectionHeading>
@@ -246,23 +241,14 @@ function Contact() {
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        {socials.map((s) =>
-          s.live ? (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noreferrer"
-              className="edi-tag edi-border px-4 py-2 hover:bg-[var(--secondary)]"
-            >
-              {s.label} ↗
-            </a>
-          ) : (
-            <span key={s.label} className="edi-tag edi-border px-4 py-2 opacity-50">
-              {s.label}
-            </span>
-          ),
-        )}
+        <a
+          href={contact.github}
+          target="_blank"
+          rel="noreferrer"
+          className="edi-tag edi-border px-4 py-2 hover:bg-[var(--secondary)]"
+        >
+          GITHUB ↗
+        </a>
       </div>
 
       <div className="mt-16 flex flex-wrap gap-6">
