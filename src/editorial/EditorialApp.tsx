@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { projects, games, profile, process, services, trust } from '../data/portfolio'
+import { projects, games, profile, process, services, trust, contact } from '../data/portfolio'
 import '../styles/editorial.css'
 import { Reveal } from './Reveal'
 import { Noise } from './Noise'
@@ -214,22 +214,57 @@ function RetroCTA({ onSwitch }: { onSwitch: () => void }) {
 }
 
 function Contact() {
+  const socials = [
+    { label: 'GITHUB', href: contact.github, live: true },
+    { label: 'LINKEDIN', href: contact.linkedin, live: false },
+    { label: 'TWITTER / X', href: contact.twitter, live: false },
+  ]
   return (
     <section id="contact" className="relative px-6 py-32 md:px-20">
       <SectionHeading>CONTACT</SectionHeading>
       <Reveal className="mt-10">
         <a
-          href={`mailto:${'kayden@nebulanoord.vercel.app'}`}
+          href={`mailto:${contact.email}`}
           className="edi-display inline-block text-[clamp(1.5rem,6vw,4rem)] text-[var(--accent)] hover:text-[var(--fg)]"
         >
           LET'S TALK →
         </a>
       </Reveal>
+      <p className="edi-tag mt-4 text-[var(--muted)]">
+        Have a project in mind, or just want to compare notes on design? Email me directly.
+      </p>
+
       <div className="mt-10 flex flex-wrap gap-3">
-        <span className="edi-tag edi-border px-4 py-2 bg-[var(--surface)]">NEBULANOORD — THIS SITE</span>
+        <a
+          href={`mailto:${contact.email}`}
+          className="edi-tag edi-border px-4 py-2 bg-[var(--accent)] text-[var(--accent-ink)] hover:bg-[var(--fg)]"
+        >
+          {contact.email}
+        </a>
         <span className="edi-tag edi-border px-4 py-2">{profile.location}</span>
         <span className="edi-tag edi-border px-4 py-2">{profile.studioDesc}</span>
       </div>
+
+      <div className="mt-6 flex flex-wrap gap-3">
+        {socials.map((s) =>
+          s.live ? (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noreferrer"
+              className="edi-tag edi-border px-4 py-2 hover:bg-[var(--secondary)]"
+            >
+              {s.label} ↗
+            </a>
+          ) : (
+            <span key={s.label} className="edi-tag edi-border px-4 py-2 opacity-50">
+              {s.label}
+            </span>
+          ),
+        )}
+      </div>
+
       <div className="mt-16 flex flex-wrap gap-6">
         <Polaroid emoji="🏎️" caption="HOT WHEELS" rotate={-4} />
         <Polaroid emoji="🏔️" caption="ALBERTA" rotate={3} />

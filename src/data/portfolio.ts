@@ -253,8 +253,8 @@ export const resume = {
 }
 
 export const contact = {
-  email: 'kayden@example.com',
-  github: 'https://github.com/',
+  email: 'nebulanoord@gmail.com',
+  github: 'https://github.com/NebulaNoord',
   linkedin: 'https://linkedin.com/',
   twitter: 'https://x.com/',
 }
