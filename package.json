@@ -12,9 +12,9 @@
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
     "@fontsource/vt323": "^5.2.7",
+    "@formspree/react": "^3.0.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "resend": "^6.17.2"
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.2",
