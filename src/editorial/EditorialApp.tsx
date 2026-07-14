@@ -6,6 +6,7 @@ import { Noise } from './Noise'
 import { MouseTrail } from './MouseTrail'
 import { SideNav, Marquee, SectionHeading } from './SideNav'
 import { ProjectCard, Stat, Polaroid, CaseStudyModal } from './Cards'
+import { ContactForm } from './ContactForm'
 
 const ArchiveOS = lazy(() => import('../App'))
 
@@ -250,6 +251,8 @@ function Contact() {
           GITHUB ↗
         </a>
       </div>
+
+      <ContactForm />
 
       <div className="mt-16 flex flex-wrap gap-6">
         <Polaroid emoji="🏎️" caption="HOT WHEELS" rotate={-4} />
