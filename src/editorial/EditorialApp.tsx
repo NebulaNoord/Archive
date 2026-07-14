@@ -226,14 +226,7 @@ function Contact() {
         </a>
       </Reveal>
       <div className="mt-10 flex flex-wrap gap-3">
-        <a
-          href="https://nebulanoord.vercel.app/"
-          target="_blank"
-          rel="noreferrer"
-          className="edi-tag edi-border px-4 py-2 hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
-        >
-          NEBULA NOORD
-        </a>
+        <span className="edi-tag edi-border px-4 py-2 bg-[var(--surface)]">NEBULANOORD — THIS SITE</span>
         <span className="edi-tag edi-border px-4 py-2">{profile.location}</span>
         <span className="edi-tag edi-border px-4 py-2">{profile.studioDesc}</span>
       </div>

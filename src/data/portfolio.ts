@@ -12,6 +12,9 @@ type Project = {
   solution: string
   outcome: string
   role: string
+  evolution?: boolean
+  versions?: { label: string; year: string; note: string }[]
+  whatChanged?: string[]
 }
 
 type Game = {
@@ -93,18 +96,35 @@ export const projects: Project[] = [
   },
   {
     name: 'Nebula Noord',
-    tagline: "The studio site — proof a one-person brand can look like an agency.",
-    description: "The studio's own website — the professional home of Nebula Noord.",
-    goal: 'Give the studio a recognizable, premium home that sells the work without saying too much.',
-    challenge: 'It had to feel like a real creative studio, not a personal résumé, while staying honest about being a one-person business.',
-    solution: 'Built a bold editorial identity with two interfaces — a maximalist site and a retro OS easter egg — under one brand.',
-    outcome: 'A site that reads as a boutique studio, with a distinctive look clients remember.',
-    role: 'Founder — design, development, brand',
+    tagline: 'The studio brand, reimagined — a case study in how my design thinking evolved.',
+    description:
+      "The studio's own brand — documented here as an evolution from its first visual identity to the portfolio you're browsing today.",
+    goal: 'Give NebulaNoord a recognizable, premium identity — and show how the studio has grown.',
+    challenge:
+      'My first version worked, but it no longer reflected how I now approach branding, interaction, and storytelling. I needed to critique my own work honestly.',
+    solution:
+      'I treated the studio like a client: redefined the visual identity, tightened the typography and motion, and rebuilt the site around a clear narrative — then kept the old version as a documented case study rather than hiding it.',
+    outcome:
+      'One brand, two chapters. The new site is the official NebulaNoord home; the original is now evidence of iteration, not a competing site.',
+    role: 'Founder — brand, design, development',
     technologies: ['React', 'TypeScript', 'Vite', 'Tailwind'],
-    features: ['Studio site', 'Two interfaces', 'Brand identity'],
+    features: ['Studio brand', 'Two interfaces', 'Documented evolution'],
     link: 'https://nebulanoord.vercel.app/',
     year: 2026,
     live: true,
+    evolution: true,
+    versions: [
+      { label: 'Version 1', year: '2025', note: 'First visual identity — the studio’s original website.' },
+      { label: 'Version 2', year: 'Current', note: 'The portfolio you’re browsing now — refined identity and storytelling.' },
+    ],
+    whatChanged: [
+      'Stronger visual identity',
+      'Better typography',
+      'Clearer storytelling',
+      'Improved motion design',
+      'Better performance',
+      'More cohesive branding',
+    ],
   },
   {
     name: 'Pythonix',

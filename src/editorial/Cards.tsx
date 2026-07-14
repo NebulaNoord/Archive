@@ -62,6 +62,9 @@ type CaseStudy = {
   outcome: string
   technologies: string[]
   link: string
+  evolution?: boolean
+  versions?: { label: string; year: string; note: string }[]
+  whatChanged?: string[]
 }
 
 export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClose: () => void }) {
@@ -108,14 +111,46 @@ export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClo
           ))}
         </div>
 
-        <dl className="mt-7 space-y-5">
-          {rows.map(([k, v]) => (
-            <div key={k} className="border-t-2 border-[var(--border-color)] pt-4">
-              <dt className="edi-tag text-[var(--accent)]">{k}</dt>
-              <dd className="mt-2 text-[var(--fg)]">{v}</dd>
+        {project.evolution ? (
+          <>
+            <div className="mt-7 grid gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+              {project.versions?.flatMap((v, i, arr) => {
+                const node = (
+                  <div key={v.label} className="edi-border bg-[var(--surface)] p-4">
+                    <div className="edi-tag text-[var(--accent)]">{v.label} · {v.year}</div>
+                    <p className="mt-2 text-[var(--fg)]">{v.note}</p>
+                  </div>
+                )
+                return i < arr.length - 1
+                  ? [node, <div key={`arrow-${i}`} className="edi-display text-center text-[var(--accent)]">↓</div>]
+                  : [node]
+              })}
             </div>
-          ))}
-        </dl>
+            <div className="mt-7 border-t-2 border-[var(--border-color)] pt-4">
+              <dt className="edi-tag text-[var(--accent)]">WHAT CHANGED?</dt>
+              <ul className="mt-3 space-y-2">
+                {project.whatChanged?.map((c) => (
+                  <li key={c} className="flex items-start gap-2 text-[var(--fg)]">
+                    <span className="edi-tag text-[var(--accent)]">•</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="edi-tag mt-6 text-[var(--muted)]">
+              THIS PORTFOLIO IS THE CURRENT NEBULANOORD SITE · THE ORIGINAL IS AN ARCHIVED CASE STUDY
+            </p>
+          </>
+        ) : (
+          <dl className="mt-7 space-y-5">
+            {rows.map(([k, v]) => (
+              <div key={k} className="border-t-2 border-[var(--border-color)] pt-4">
+                <dt className="edi-tag text-[var(--accent)]">{k}</dt>
+                <dd className="mt-2 text-[var(--fg)]">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
 
         <a
           href={project.link}
@@ -123,7 +158,7 @@ export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClo
           rel="noreferrer"
           className="edi-tag edi-border mt-7 inline-block bg-[var(--accent)] px-5 py-3 text-[var(--accent-ink)] hover:bg-[var(--fg)]"
         >
-          VISIT LIVE SITE →
+          {project.evolution ? 'VISIT CURRENT SITE →' : 'VISIT LIVE SITE →'}
         </a>
       </div>
     </div>
