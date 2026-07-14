@@ -24,8 +24,6 @@ export default function ContactApp() {
         <div className="flex flex-wrap gap-2">
           <button className="win-btn text-sm">Send</button>
           <a className="win-btn text-sm" href={contact.github} target="_blank" rel="noreferrer">GitHub</a>
-          <a className="win-btn text-sm" href={contact.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-          <a className="win-btn text-sm" href={contact.twitter} target="_blank" rel="noreferrer">Twitter</a>
         </div>
       </div>
     </div>
