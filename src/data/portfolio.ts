@@ -109,7 +109,7 @@ export const projects: Project[] = [
     role: 'Founder — brand, design, development',
     technologies: ['React', 'TypeScript', 'Vite', 'Tailwind'],
     features: ['Studio brand', 'Two interfaces', 'Documented evolution'],
-    link: 'https://nebulanoord.vercel.app/',
+    link: 'https://nebulanoordv1.vercel.app/',
     year: 2026,
     live: true,
     evolution: true,
