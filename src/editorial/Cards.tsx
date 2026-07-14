@@ -158,7 +158,7 @@ export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClo
           rel="noreferrer"
           className="edi-tag edi-border mt-7 inline-block bg-[var(--accent)] px-5 py-3 text-[var(--accent-ink)] hover:bg-[var(--fg)]"
         >
-          {project.evolution ? 'VISIT CURRENT SITE →' : 'VISIT LIVE SITE →'}
+          {project.evolution ? 'VISIT VERSION 1 →' : 'VISIT LIVE SITE →'}
         </a>
       </div>
     </div>

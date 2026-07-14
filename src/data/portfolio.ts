@@ -189,7 +189,7 @@ export const services: string[] = [
 export const trust: { label: string; value: string }[] = [
   { label: 'Stack', value: 'TypeScript · React · Vite · Tailwind' },
   { label: 'Typical build', value: '1–3 weeks, depending on scope' },
-  { label: 'Performance', value: '~65 kB initial JS · built for speed' },
+  { label: 'Performance', value: '~79 kB initial JS · built for speed' },
   { label: 'Accessibility', value: 'Semantic markup · reduced-motion aware' },
 ]
 
