@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { appRegistry } from '../apps/registry'
 import { useOS } from '../contexts/OSContext'
+import { useClock } from '../hooks/useClock'
 import { usePerformanceStats } from '../hooks/usePerformanceStats'
 import { Wallpaper } from './Wallpaper'
 import { Taskbar } from './Taskbar'
@@ -40,6 +41,7 @@ function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: 
 export function Desktop({ toasts }: DesktopProps) {
   const { openApp, theme, windows, desktopItems, setWallpaper } = useOS()
   const { fps } = usePerformanceStats(theme.developerMode)
+  const clock = useClock()
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null)
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>(() => ({
     ...defaultPositions(desktopItems),
@@ -170,10 +172,18 @@ export function Desktop({ toasts }: DesktopProps) {
         <WindowFrame key={windowState.id} windowState={windowState} />
       ))}
 
-      <div className="win-raised absolute right-4 top-4 z-20 hidden w-72 p-2 text-xs text-black md:block">
-        <div className="win-titlebar mb-2 px-2 py-1 font-bold">SYSTEM RESUME</div>
-        You found Kayden&apos;s computer. Open an app from the desktop or the Start menu. Read Welcome.txt.
-        <p className="mt-2 text-[10px] text-[#808080]">Tip: drag icons to rearrange.</p>
+      <div className="win-raised absolute right-4 top-4 z-20 hidden w-72 p-2 text-black md:block">
+        <div className="win-titlebar mb-2 flex items-center justify-between px-2 py-1 font-bold">
+          <span>SYSTEM RESUME</span>
+          <span className="h-2 w-2 animate-[win-flicker_2s_steps(3)_infinite] rounded-full bg-[#39ff7a]" />
+        </div>
+        <p className="win-pixel text-[10px] text-[#000080]">NEBULANOORD</p>
+        <p className="text-sm">Kayden&apos;s studio workspace — open an app from the desktop or Start menu, then read Welcome.txt.</p>
+        <p className="mt-2 text-[10px] text-[#808080]">Tip: drag icons to rearrange · right-click for wallpaper.</p>
+        <div className="mt-2 win-sunken flex items-center justify-between px-2 py-1 text-[11px]">
+          <span className="text-[#808080]">LOCAL TIME</span>
+          <span className="win-pixel text-[#000080]">{clock}</span>
+        </div>
       </div>
 
       {theme.developerMode && (

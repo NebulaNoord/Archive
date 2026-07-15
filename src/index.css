@@ -138,7 +138,12 @@ select {
   padding: 4px 9px 2px 11px;
 }
 
-/* Title bars use the classic navy gradient */
+/* Active window gets a subtle accent glow so the focused app reads clearly */
+.win-active {
+  box-shadow: 0 0 0 1px var(--win-dark), 0 8px 22px rgba(0,0,0,0.35);
+}
+
+/* Title bars use the classic navy gradient by default (inline accent overrides when active) */
 .win-titlebar {
   background: linear-gradient(90deg, var(--win-title), var(--win-title-2));
   color: #fff;

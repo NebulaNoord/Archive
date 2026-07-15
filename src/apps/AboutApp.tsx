@@ -4,6 +4,14 @@ import { PixelAvatar } from '../pixelArt'
 export default function AboutApp() {
   return (
     <div className="win-body space-y-2 text-black">
+      <section className="win-raised flex items-center justify-between bg-[#000080] p-2 text-white">
+        <div>
+          <p className="win-pixel text-[12px] tracking-widest">NEBULANOORD</p>
+          <p className="text-sm text-[#9aa6ff]">Independent Design &amp; Development Studio</p>
+        </div>
+        <span className="win-pixel text-[10px] text-[#ffd000]">EST. 2026</span>
+      </section>
+
       <section className="win-raised flex gap-3 p-2">
         <div className="win-sunken shrink-0 p-1">
           <PixelAvatar size={112} />

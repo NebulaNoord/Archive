@@ -8,7 +8,7 @@ type WindowFrameProps = {
 }
 
 export function WindowFrame({ windowState }: WindowFrameProps) {
-  const { closeWindow, focusWindow, maximizeWindow, minimizeWindow, updateWindow, theme } = useOS()
+  const { closeWindow, focusWindow, maximizeWindow, minimizeWindow, updateWindow, theme, windows } = useOS()
   const dragStart = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null)
   const app = appRegistry[windowState.appId]
   const AppComponent = app.component
@@ -61,15 +61,22 @@ export function WindowFrame({ windowState }: WindowFrameProps) {
   const animClass =
     theme.animations && windowState.anim ? `win-anim-${windowState.anim}` : ''
 
+  // Active (focused) windows tint their title bar to the chosen accent; inactive stay navy.
+  const isActive = windowState.zIndex >= Math.max(0, ...windows.map((w) => w.zIndex))
+  const titleStyle = isActive
+    ? { background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent}cc)` }
+    : undefined
+
   return (
     <section
-      className={`win-raised absolute flex overflow-hidden ${animClass}`}
+      className={`win-raised absolute flex overflow-hidden ${animClass} ${isActive ? 'win-active' : 'opacity-95'}`}
       style={{ ...boundsStyle, zIndex: windowState.zIndex }}
       onPointerDown={() => focusWindow(windowState.id)}
     >
       <div className="flex min-h-0 w-full flex-col">
         <div
           className="win-titlebar flex cursor-move items-center justify-between px-1 py-0.5"
+          style={titleStyle}
           onPointerDown={startDrag}
           onDoubleClick={() => maximizeWindow(windowState.id)}
         >
