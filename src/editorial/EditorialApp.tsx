@@ -241,6 +241,14 @@ function Contact() {
         <span className="edi-tag edi-border px-4 py-2">{profile.studioDesc}</span>
       </div>
 
+      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-[var(--muted)]">
+        <span className="edi-tag">
+          <span className="inline-block h-2 w-2 rounded-full bg-[var(--secondary)]" /> {profile.availability.status}
+        </span>
+        <span className="edi-tag">{profile.availability.timezone}</span>
+        <span className="edi-tag">{profile.availability.response}</span>
+      </div>
+
       <div className="mt-6 flex flex-wrap gap-3">
         <a
           href={contact.github}
@@ -311,7 +319,24 @@ export default function EditorialApp() {
           <RetroCTA onSwitch={() => { setRetroFromCTA(true); setRetro(true) }} />
         </section>
         <Contact />
+        <Footer />
       </main>
     </div>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="border-t-2 border-[var(--border-color)] px-6 py-10 md:px-20">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <span className="edi-tag text-[var(--muted)]">© {new Date().getFullYear()} NEBULANOORD</span>
+        <a
+          href="/privacy.html"
+          className="edi-tag edi-border px-3 py-2 hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
+        >
+          PRIVACY
+        </a>
+      </div>
+    </footer>
   )
 }

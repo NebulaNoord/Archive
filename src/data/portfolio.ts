@@ -38,6 +38,11 @@ export const profile = {
   location: 'Alberta, Canada',
   roles: ['Founder', 'Frontend Developer', 'Student'],
   // Short site intro (hero support line) — direct, human, no buzzwords.
+  availability: {
+    status: 'OPEN FOR NEW PROJECTS',
+    timezone: 'ALBERTA (MST)',
+    response: 'TYPICALLY REPLY WITHIN 24–48H',
+  },
   intro:
     'I design and build fast, interactive websites that help brands stand out through thoughtful design and memorable user experiences.',
   // About NebulaNoord + personal intro (About section).
