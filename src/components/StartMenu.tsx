@@ -10,14 +10,14 @@ const sections: { title: string; items: StartMenuItem[] }[] = [
     items: [
       { label: 'User Profile', appId: 'about' },
       { label: 'Developer Environment', appId: 'workspace' },
-      { label: 'Mail', appId: 'contact' },
+      { label: 'Mail', appId: 'mail' },
       { label: 'Browser', appId: 'browser' },
     ],
   },
   {
     title: 'WORK',
     items: [
-      { label: 'Projects', appId: 'projects' },
+      { label: 'Projects', appId: 'files' },
       { label: 'Resume', appId: 'resume' },
       { label: 'Timeline', appId: 'timeline' },
       { label: 'Photos', appId: 'photos' },
