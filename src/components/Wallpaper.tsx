@@ -417,71 +417,94 @@ function Classic() {
   return <div className="h-full w-full" style={{ backgroundColor: '#008080' }} aria-hidden />
 }
 
-/* ============================== STUDIO (Brand palette) ============================== */
+/* ============================== STUDIO (Brand synthwave) ============================== */
+function SkylineBuilding({ x, top, w, idx, accent }: { x: number; top: number; w: number; idx: number; accent: string }) {
+  const rows = Math.floor((84 - top) / 8)
+  const cols = Math.floor(w / 5)
+  return (
+    <g>
+      <rect x={x} y={top} width={w} height={100 - top} fill="#0c0420" />
+      {Array.from({ length: rows }).map((_, r) =>
+        Array.from({ length: cols }).map((_, c) => {
+          const lit = (x + r + c + idx) % 3 === 0
+          return (
+            <rect
+              key={`${r}-${c}`}
+              x={x + 2 + c * 5}
+              y={top + 3 + r * 8}
+              width="2.4"
+              height="2.4"
+              fill={lit ? accent : '#160a2e'}
+              opacity={lit ? 0.95 : 1}
+            />
+          )
+        }),
+      )}
+    </g>
+  )
+}
+
 function Studio({ animate, accent = '#38bdf8' }: { animate?: boolean; accent?: string }) {
-  // Small palette evoking the NebulaNoord brand: deep navy field, accent-bright
-  // constellation lines, and a gently pulsing accent sun.
+  // Outrun/synthwave desktop: deep gradient sky, a glowing sun with scanline
+  // bands, a neon skyline, and a reflective grid floor — all tinted to the
+  // brand accent so it reads as "the NebulaNoord OS".
   return (
     <svg className="h-full w-full" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden>
       <defs>
-        <radialGradient id="studio-bg" cx="72%" cy="34%" r="80%">
-          <stop offset="0%" stopColor="#16204a" />
-          <stop offset="60%" stopColor="#0c1230" />
-          <stop offset="100%" stopColor="#05060f" />
-        </radialGradient>
-        <radialGradient id="studio-sun" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={accent} />
-          <stop offset="70%" stopColor={accent} stopOpacity="0.5" />
-          <stop offset="100%" stopColor={accent} stopOpacity="0" />
-        </radialGradient>
+        <linearGradient id="studio-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1a0b2e" />
+          <stop offset="42%" stopColor="#3a135c" />
+          <stop offset="60%" stopColor={accent} stopOpacity="0.55" />
+          <stop offset="62%" stopColor="#0a0420" />
+          <stop offset="100%" stopColor="#05010f" />
+        </linearGradient>
+        <linearGradient id="studio-sun" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#fff6c4" />
+          <stop offset="45%" stopColor={accent} />
+          <stop offset="100%" stopColor="#ff5d8f" />
+        </linearGradient>
+        <linearGradient id="studio-floor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1a0833" />
+          <stop offset="100%" stopColor="#2a0f4d" />
+        </linearGradient>
       </defs>
-      <rect width="160" height="100" fill="url(#studio-bg)" />
-      {/* accent sun glow */}
-      <circle cx="116" cy="30" r="22" fill="url(#studio-sun)" className={animate ? 'studio-pulse' : ''} />
-      <circle cx="116" cy="30" r="7" fill={accent} className={animate ? 'studio-pulse' : ''} />
-      {/* constellation nodes linked by accent lines */}
-      {(() => {
-        const nodes = [
-          [18, 22], [34, 14], [46, 30], [30, 40], [54, 48], [20, 58], [70, 22], [64, 54],
-        ]
-        const edges = [
-          [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [0, 5], [1, 6], [4, 7],
-        ]
-        return (
-          <g>
-            {edges.map(([a, b], i) => (
-              <line
-                key={i}
-                x1={nodes[a][0]}
-                y1={nodes[a][1]}
-                x2={nodes[b][0]}
-                y2={nodes[b][1]}
-                stroke={accent}
-                strokeWidth="0.6"
-                opacity="0.5"
-              />
-            ))}
-            {nodes.map(([x, y], i) => (
-              <rect
-                key={i}
-                x={x - 1}
-                y={y - 1}
-                width="2"
-                height="2"
-                fill={accent}
-                className={animate ? 'studio-twinkle' : ''}
-                style={{ animationDelay: `${i * 0.3}s` }}
-              />
-            ))}
-          </g>
-        )
-      })()}
-      {/* subtle brand "N" mark drifting in the corner */}
-      <g transform="translate(132,70)" fill={accent} opacity="0.35">
-        <rect x="0" y="0" width="2" height="14" />
-        <rect x="10" y="0" width="2" height="14" />
-        <rect x="0" y="6" width="12" height="2" transform="rotate(-32 6 7)" />
+
+      {/* sky */}
+      <rect width="160" height="100" fill="url(#studio-sky)" />
+
+      {/* stars */}
+      {[ [18,8],[34,5],[52,12],[70,6],[92,10],[112,5],[134,12],[146,7],[26,16],[60,15],[128,16] ].map(([x,y],i)=>(
+        <rect key={i} x={x} y={y} width="0.8" height="0.8" fill="#fff" className={animate ? 'star' : ''} opacity="0.9" />
+      ))}
+
+      {/* sun with scanline bands */}
+      <g transform="translate(80,40)">
+        <circle cx="0" cy="0" r="20" fill="url(#studio-sun)" className={animate ? 'studio-pulse' : ''} />
+        {[ -6, -2, 2, 6, 10 ].map((yy, i) => (
+          <rect key={i} x="-21" y={yy} width="42" height="2.4" fill="#1a0b2e" />
+        ))}
       </g>
+
+      {/* neon skyline silhouette */}
+      {[ [10,52,12],[24,46,12],[38,56,10],[52,42,12],[66,50,10],[96,48,12],[110,40,12],[124,54,10],[138,46,12] ].map(([x,top,w],i)=>(
+        <SkylineBuilding key={i} x={x} top={top} w={w} idx={i} accent={accent} />
+      ))}
+
+      {/* grid floor */}
+      <rect y="62" width="160" height="38" fill="url(#studio-floor)" />
+      <g stroke={accent} strokeWidth="0.5" opacity="0.55">
+        {/* horizontals receding */}
+        {[66,71,77,84,92,100].map((y,i)=>(
+          <line key={i} x1="0" y1={y} x2="160" y2={y} opacity={0.7 - i*0.08} />
+        ))}
+        {/* perspective verticals toward a vanishing point */}
+        {Array.from({ length: 17 }).map((_,i)=>{
+          const x=10*i
+          return <line key={i} x1={x} y1="100" x2="80" y2="62" opacity="0.5" />
+        })}
+      </g>
+      {/* horizon glow */}
+      <rect y="60" width="160" height="3" fill={accent} opacity="0.8" className={animate ? 'studio-twinkle' : ''} />
     </svg>
   )
 }

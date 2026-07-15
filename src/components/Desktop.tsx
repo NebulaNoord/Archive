@@ -13,7 +13,7 @@ type DesktopProps = {
   toasts: { id: number; label: string }[]
 }
 
-const POS_KEY = 'archive-icon-positions'
+const POS_KEY = 'archive-icon-positions-v2'
 
 function loadPositions(): Record<string, { x: number; y: number }> {
   try {
@@ -24,34 +24,61 @@ function loadPositions(): Record<string, { x: number; y: number }> {
   }
 }
 
-function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: number }> {
-  // Deterministic scatter across the desktop (seeded by index) so icons feel
-  // placed, not piled in the corner. Avoids the taskbar (~bottom 44px) and the
-  // top-right SYSTEM RESUME panel.
-  const startX = 16
-  const startY = 16
-  const cellW = 116
-  const cellH = 104
-  const cols = Math.max(2, Math.min(4, Math.floor((typeof window !== 'undefined' ? window.innerWidth : 1280) / cellW)))
-  // Stable pseudo-random offsets so the layout looks scattered but consistent.
-  const jitter = (i: number) => {
-    const a = Math.sin((i + 1) * 12.9898) * 43758.5453
-    const b = Math.sin((i + 1) * 78.233) * 23421.631
-    return {
-      dx: (a - Math.floor(a) - 0.5) * (cellW - 96),
-      dy: (b - Math.floor(b) - 0.5) * (cellH - 80),
-    }
+// Deterministic 32-bit hash of a string (FNV-1a)
+function hashStr(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
   }
+  return h >>> 0
+}
+
+// Seeded PRNG so each icon lands in a stable-but-scattered spot across reloads.
+function mulberry32(seed: number) {
+  let a = seed
+  return () => {
+    a |= 0
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: number }> {
+  const W = typeof window !== 'undefined' ? window.innerWidth : 1280
+  const H = typeof window !== 'undefined' ? window.innerHeight : 720
+  const iconW = 96
+  const iconH = 82
+  const marginX = 16
+  const marginTop = 16
+  const marginBottom = 48 // taskbar
+  const panelW = 300 // top-right SYSTEM RESUME panel
+  const panelH = 210
+  const placed: { x: number; y: number }[] = []
   const pos: Record<string, { x: number; y: number }> = {}
-  items.forEach((item, i) => {
-    const col = i % cols
-    const row = Math.floor(i / cols)
-    const { dx, dy } = jitter(i)
-    pos[item.id] = {
-      x: Math.max(startX, Math.round(startX + col * cellW + dx)),
-      y: Math.max(startY, Math.round(startY + row * cellH + dy)),
+
+  for (const item of items) {
+    const rand = mulberry32(hashStr(item.id))
+    let best: { x: number; y: number } | null = null
+    for (let attempt = 0; attempt < 80; attempt++) {
+      const x = marginX + rand() * (W - marginX - iconW - 8)
+      const y = marginTop + rand() * (H - marginTop - marginBottom - iconH - 8)
+      // Keep clear of the top-right SYSTEM RESUME panel.
+      if (x + iconW > W - panelW - 12 && y < panelH) continue
+      // Require real separation from already-placed icons (kills the grid look).
+      const far = placed.every((p) => (p.x - x) ** 2 + (p.y - y) ** 2 > 96 * 96)
+      if (far) {
+        best = { x: Math.round(x), y: Math.round(y) }
+        break
+      }
+      if (!best) best = { x: Math.round(x), y: Math.round(y) }
     }
-  })
+    if (!best) best = { x: marginX + placed.length * 10, y: marginTop + (placed.length % 2) * 96 }
+    placed.push(best)
+    pos[item.id] = best
+  }
   return pos
 }
 
