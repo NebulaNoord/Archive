@@ -35,7 +35,7 @@ export function Taskbar() {
             title={appRegistry[id].name}
             onClick={() => openApp(id)}
           >
-            {appRegistry[id].renderIcon({ size: 18 })}
+            {appRegistry[id].renderIcon({ size: 22 })}
           </button>
         ))}
 

@@ -98,7 +98,7 @@ export function StartMenu({ onClose }: StartMenuProps) {
                     className="flex w-full items-center gap-2 px-2 py-1.5 win-pixel text-[9px] hover:bg-[#000080] hover:text-white"
                     onClick={() => { openApp(item.appId); onClose() }}
                   >
-                    {appRegistry[item.appId].renderIcon({ size: 22 })}
+                    {appRegistry[item.appId].renderIcon({ size: 26 })}
                     {item.label}
                   </button>
                 </li>
@@ -115,7 +115,7 @@ export function StartMenu({ onClose }: StartMenuProps) {
                         className="flex w-full items-center gap-2 px-2 py-1.5 win-pixel text-[9px] hover:bg-[#000080] hover:text-white"
                         onClick={() => { openApp(item.appId); onClose() }}
                       >
-                        {appRegistry[item.appId].renderIcon({ size: 22 })}
+                        {appRegistry[item.appId].renderIcon({ size: 26 })}
                         {item.label}
                       </button>
                     </li>

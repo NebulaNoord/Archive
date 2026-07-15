@@ -49,8 +49,8 @@ function mulberry32(seed: number) {
 function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: number }> {
   const W = typeof window !== 'undefined' ? window.innerWidth : 1280
   const H = typeof window !== 'undefined' ? window.innerHeight : 720
-  const iconW = 96
-  const iconH = 82
+  const iconW = 112
+  const iconH = 98
   const marginX = 16
   const marginTop = 16
   const marginBottom = 48 // taskbar
@@ -68,7 +68,7 @@ function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: 
       // Keep clear of the top-right SYSTEM RESUME panel.
       if (x + iconW > W - panelW - 12 && y < panelH) continue
       // Require real separation from already-placed icons (kills the grid look).
-      const far = placed.every((p) => (p.x - x) ** 2 + (p.y - y) ** 2 > 96 * 96)
+      const far = placed.every((p) => (p.x - x) ** 2 + (p.y - y) ** 2 > 100 * 100)
       if (far) {
         best = { x: Math.round(x), y: Math.round(y) }
         break
@@ -127,8 +127,8 @@ export function Desktop({ toasts }: DesktopProps) {
     if (!dragging.current) return
     moved.current = true
     const { id, offsetX, offsetY } = dragging.current
-    const x = Math.max(0, Math.min(window.innerWidth - 96, e.clientX - offsetX))
-    const y = Math.max(0, Math.min(window.innerHeight - 40, e.clientY - offsetY))
+    const x = Math.max(0, Math.min(window.innerWidth - 112, e.clientX - offsetX))
+    const y = Math.max(0, Math.min(window.innerHeight - 64, e.clientY - offsetY))
     setPositions((prev) => ({ ...prev, [id]: { x, y } }))
   }
 
@@ -180,32 +180,32 @@ export function Desktop({ toasts }: DesktopProps) {
         const pos = positions[item.id] ?? { x: 0, y: 0 }
         const icon =
           item.kind === 'app' && item.appId
-            ? appRegistry[item.appId].renderIcon({ size: 32 })
+            ? appRegistry[item.appId].renderIcon({ size: 44 })
             : item.kind === 'file'
-              ? appRegistry.notepad.renderIcon({ size: 32 })
+              ? appRegistry.notepad.renderIcon({ size: 44 })
               : null
         const folderColor = item.tint ?? '#ffd000'
         const isDragging = dragging.current?.id === item.id
         return (
           <button
             key={item.id}
-            className={`absolute z-10 flex w-24 flex-col items-center gap-1 text-center text-white outline-none focus:bg-[#000080]/40 ${isDragging ? 'opacity-80' : ''}`}
+            className={`absolute z-10 flex w-28 flex-col items-center gap-1 text-center outline-none focus-visible:bg-[#000080]/40 ${isDragging ? 'opacity-80' : ''}`}
             style={{ left: pos.x, top: pos.y, touchAction: 'none' }}
             onPointerDown={(e) => onPointerDownIcon(e, item)}
             onPointerMove={onPointerMoveIcon}
             onPointerUp={(e) => onPointerUpIcon(e, item)}
             onDoubleClick={() => handleItem(item)}
           >
-            <span className="drop-shadow-[2px_2px_0_#000]">
+            <span className="rounded-md bg-black/35 p-1 ring-1 ring-white/15 backdrop-blur-[1px] drop-shadow-[2px_2px_0_#000]">
               {icon ?? (
-                <svg viewBox="0 0 16 16" width={32} height={32} shapeRendering="crispEdges" aria-hidden>
+                <svg viewBox="0 0 16 16" width={44} height={44} shapeRendering="crispEdges" aria-hidden>
                   <rect x="1" y="3" width="6" height="2" fill={folderColor} stroke="#000" />
                   <rect x="1" y="4" width="14" height="10" fill={folderColor} stroke="#000" />
                   <rect x="2" y="6" width="12" height="7" fill="#fff3c4" />
                 </svg>
               )}
             </span>
-            <span className="border border-transparent px-1 text-xs leading-tight shadow-[1px_1px_0_#000] focus:border-white">
+            <span className="win-pixel rounded bg-[#000080] px-1.5 py-0.5 text-[11px] leading-tight text-white shadow-[1px_1px_0_#000] ring-1 ring-white/20">
               {item.label}
             </span>
           </button>
