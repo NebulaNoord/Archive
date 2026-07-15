@@ -246,6 +246,56 @@ select {
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+/* ===== CRT power-on sweep ===== */
+.crt-power-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  box-shadow: 0 0 24px 6px rgba(255, 255, 255, 0.7);
+  height: 3px;
+}
+.crt-power-expand {
+  animation: crt-power-expand 0.42s ease-out forwards;
+}
+.crt-power-hold {
+  top: 0;
+  bottom: 0;
+  height: auto;
+  opacity: 0.9;
+}
+.crt-power-collapse {
+  animation: crt-power-collapse 0.4s ease-in forwards;
+}
+.crt-power-fill {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: -1;
+}
+.crt-power-fill-on {
+  animation: crt-power-fill-on 0.2s ease-out forwards;
+}
+.crt-power-fill-off {
+  animation: crt-power-fill-off 0.4s ease-in forwards;
+}
+@keyframes crt-power-expand {
+  0% { top: 50%; bottom: 50%; opacity: 1; }
+  100% { top: 0; bottom: 0; opacity: 0.9; }
+}
+@keyframes crt-power-collapse {
+  0% { top: 50%; bottom: 50%; opacity: 0.9; }
+  100% { top: 50%; bottom: 50%; opacity: 0; height: 0; }
+}
+@keyframes crt-power-fill-on {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes crt-power-fill-off {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* ===== Wallpaper ambient animations ===== */
 @keyframes wp-cloud-slow { 0% { transform: translateX(0); } 50% { transform: translateX(14px); } 100% { transform: translateX(0); } }
 .wp-cloud-slow, .cloud-slow { animation: wp-cloud-slow 26s ease-in-out infinite; }
@@ -271,6 +321,12 @@ select {
 .car-b { animation: wp-car-b 11s linear infinite; }
 @keyframes wp-flicker-win { 0%, 100% { opacity: 1; } 45% { opacity: 0.4; } 50% { opacity: 0.9; } 80% { opacity: 0.5; } }
 .flicker-win { animation: wp-flicker-win 2.7s steps(3) infinite; }
+
+/* ===== Brand "Studio" wallpaper accents ===== */
+@keyframes studio-pulse { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+.studio-pulse { transform-box: fill-box; transform-origin: center; animation: studio-pulse 3.4s ease-in-out infinite; }
+@keyframes studio-twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+.studio-twinkle { animation: studio-twinkle 2.2s ease-in-out infinite; }
 
 /* ===== CRT ambient flicker + scanline noise ===== */
 .crt-flicker {

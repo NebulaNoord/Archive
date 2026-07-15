@@ -1,5 +1,6 @@
 import { appRegistry } from '../apps/registry'
 import { useOS } from '../contexts/OSContext'
+import { useState } from 'react'
 
 type StartMenuItem = { label: string; appId: keyof typeof appRegistry }
 
@@ -43,6 +44,21 @@ type StartMenuProps = {
 
 export function StartMenu({ onClose }: StartMenuProps) {
   const { openApp, shutdown } = useOS()
+  const [query, setQuery] = useState('')
+
+  const q = query.trim().toLowerCase()
+  const allItems = sections.flatMap((s) => s.items)
+  const filtered = q
+    ? allItems.filter((item) => item.label.toLowerCase().includes(q))
+    : null
+
+  const submit = () => {
+    const first = filtered?.[0]
+    if (first) {
+      openApp(first.appId)
+      onClose()
+    }
+  }
 
   return (
     <>
@@ -56,28 +72,59 @@ export function StartMenu({ onClose }: StartMenuProps) {
           <span className="h-2 w-2 rounded-full bg-[#39ff7a]" />
         </div>
         <div className="flex-1 py-1">
-          {sections.map((section) => (
-            <div key={section.title}>
-              <p className="win-pixel px-2 py-1 text-[8px] text-[#808080]">{section.title}</p>
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item.appId}>
-                    <button
-                      className="flex w-full items-center gap-2 px-2 py-1.5 win-pixel text-[9px] hover:bg-[#000080] hover:text-white"
-                      onClick={() => {
-                        openApp(item.appId)
-                        onClose()
-                      }}
-                    >
-                      {appRegistry[item.appId].renderIcon({ size: 22 })}
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <li className="my-1 border-t-2 border-[#808080] border-dashed" />
-            </div>
-          ))}
+          <div className="win-sunken mx-2 mb-1 flex items-center gap-1 px-2 py-1">
+            <span className="text-[#808080]">🔍</span>
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') submit()
+                if (e.key === 'Escape') onClose()
+              }}
+              placeholder="Search apps..."
+              className="w-full bg-transparent text-sm outline-none placeholder:text-[#808080]"
+            />
+          </div>
+
+          {filtered ? (
+            <ul>
+              {filtered.length === 0 && (
+                <li className="px-3 py-2 text-[11px] text-[#808080]">No matches</li>
+              )}
+              {filtered.map((item) => (
+                <li key={item.appId}>
+                  <button
+                    className="flex w-full items-center gap-2 px-2 py-1.5 win-pixel text-[9px] hover:bg-[#000080] hover:text-white"
+                    onClick={() => { openApp(item.appId); onClose() }}
+                  >
+                    {appRegistry[item.appId].renderIcon({ size: 22 })}
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            sections.map((section) => (
+              <div key={section.title}>
+                <p className="win-pixel px-2 py-1 text-[8px] text-[#808080]">{section.title}</p>
+                <ul>
+                  {section.items.map((item) => (
+                    <li key={item.appId}>
+                      <button
+                        className="flex w-full items-center gap-2 px-2 py-1.5 win-pixel text-[9px] hover:bg-[#000080] hover:text-white"
+                        onClick={() => { openApp(item.appId); onClose() }}
+                      >
+                        {appRegistry[item.appId].renderIcon({ size: 22 })}
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <li className="my-1 border-t-2 border-[#808080] border-dashed" />
+              </div>
+            ))
+          )}
 
           <ul>
             <li>

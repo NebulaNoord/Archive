@@ -4,6 +4,7 @@ import { Wallpaper } from '../components/Wallpaper'
 import { ACHIEVEMENTS, ACHIEVEMENT_LABELS } from '../data/achievements'
 
 const wallpapers: { id: WallpaperId; label: string; emoji: string }[] = [
+  { id: 'studio', label: 'Studio', emoji: '✦' },
   { id: 'alpine', label: 'Alpine', emoji: '🏔️' },
   { id: 'evergreen', label: 'Evergreen', emoji: '🌲' },
   { id: 'nightcity', label: 'Night City', emoji: '🌆' },

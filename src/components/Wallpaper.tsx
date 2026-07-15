@@ -5,6 +5,8 @@ type WallpaperProps = {
   id: WallpaperId
   /** when true, ambient animations (clouds, stars, rain) play */
   animate?: boolean
+  /** brand accent color, threaded into accent-aware scenes */
+  accent?: string
   className?: string
 }
 
@@ -415,7 +417,76 @@ function Classic() {
   return <div className="h-full w-full" style={{ backgroundColor: '#008080' }} aria-hidden />
 }
 
-const scenes: Record<WallpaperId, (p: { animate?: boolean }) => ReactElement> = {
+/* ============================== STUDIO (Brand palette) ============================== */
+function Studio({ animate, accent = '#38bdf8' }: { animate?: boolean; accent?: string }) {
+  // Small palette evoking the NebulaNoord brand: deep navy field, accent-bright
+  // constellation lines, and a gently pulsing accent sun.
+  return (
+    <svg className="h-full w-full" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <radialGradient id="studio-bg" cx="72%" cy="34%" r="80%">
+          <stop offset="0%" stopColor="#16204a" />
+          <stop offset="60%" stopColor="#0c1230" />
+          <stop offset="100%" stopColor="#05060f" />
+        </radialGradient>
+        <radialGradient id="studio-sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={accent} />
+          <stop offset="70%" stopColor={accent} stopOpacity="0.5" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="160" height="100" fill="url(#studio-bg)" />
+      {/* accent sun glow */}
+      <circle cx="116" cy="30" r="22" fill="url(#studio-sun)" className={animate ? 'studio-pulse' : ''} />
+      <circle cx="116" cy="30" r="7" fill={accent} className={animate ? 'studio-pulse' : ''} />
+      {/* constellation nodes linked by accent lines */}
+      {(() => {
+        const nodes = [
+          [18, 22], [34, 14], [46, 30], [30, 40], [54, 48], [20, 58], [70, 22], [64, 54],
+        ]
+        const edges = [
+          [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [0, 5], [1, 6], [4, 7],
+        ]
+        return (
+          <g>
+            {edges.map(([a, b], i) => (
+              <line
+                key={i}
+                x1={nodes[a][0]}
+                y1={nodes[a][1]}
+                x2={nodes[b][0]}
+                y2={nodes[b][1]}
+                stroke={accent}
+                strokeWidth="0.6"
+                opacity="0.5"
+              />
+            ))}
+            {nodes.map(([x, y], i) => (
+              <rect
+                key={i}
+                x={x - 1}
+                y={y - 1}
+                width="2"
+                height="2"
+                fill={accent}
+                className={animate ? 'studio-twinkle' : ''}
+                style={{ animationDelay: `${i * 0.3}s` }}
+              />
+            ))}
+          </g>
+        )
+      })()}
+      {/* subtle brand "N" mark drifting in the corner */}
+      <g transform="translate(132,70)" fill={accent} opacity="0.35">
+        <rect x="0" y="0" width="2" height="14" />
+        <rect x="10" y="0" width="2" height="14" />
+        <rect x="0" y="6" width="12" height="2" transform="rotate(-32 6 7)" />
+      </g>
+    </svg>
+  )
+}
+
+const scenes: Record<WallpaperId, (p: { animate?: boolean; accent?: string }) => ReactElement> = {
   classic: Classic,
   bliss: Bliss,
   alpine: Alpine,
@@ -426,6 +497,7 @@ const scenes: Record<WallpaperId, (p: { animate?: boolean }) => ReactElement> = 
   sunset: Sunset,
   workspace: Workspace,
   garage: Garage,
+  studio: Studio,
 }
 
 /**
@@ -433,11 +505,11 @@ const scenes: Record<WallpaperId, (p: { animate?: boolean }) => ReactElement> = 
  * so it reads as low-res pixel art. Several include animated ambient
  * elements (clouds, stars, rain, fireflies) and hidden easter eggs.
  */
-export function Wallpaper({ id, animate, className }: WallpaperProps) {
+export function Wallpaper({ id, animate, accent, className }: WallpaperProps) {
   const Scene = scenes[id] ?? Classic
   return (
     <div className={`absolute inset-0 ${className ?? ''}`}>
-      <Scene animate={animate} />
+      <Scene animate={animate} accent={accent} />
     </div>
   )
 }

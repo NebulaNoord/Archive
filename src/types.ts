@@ -29,6 +29,7 @@ export type WallpaperId =
   | 'sunset'
   | 'workspace'
   | 'garage'
+  | 'studio'
 
 export type AchievementId =
   | 'first-boot'

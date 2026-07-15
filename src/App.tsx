@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { appRegistry } from './apps/registry'
 import { BootSequence } from './components/BootSequence'
+import { CrtPowerOn } from './components/CrtPowerOn'
 import { Desktop } from './components/Desktop'
 import { ShutDownScreen } from './components/ShutDownScreen'
 import { OSContext } from './contexts/OSContext'
@@ -17,7 +18,7 @@ const KONAMI = [
 
 function pickWallpaperForHour(hour: number): WallpaperId {
   if (hour >= 5 && hour < 8) return 'alpine'
-  if (hour >= 8 && hour < 17) return 'prairie'
+  if (hour >= 8 && hour < 17) return 'studio'
   if (hour >= 17 && hour < 20) return 'sunset'
   return 'nightcity'
 }
@@ -46,6 +47,7 @@ const initialTheme: ThemeState = {
 
 function App({ onExitRetro }: { onExitRetro?: () => void }) {
   const [booted, setBooted] = useState(false)
+  const [poweringOn, setPoweringOn] = useState(true)
   const [shuttingDown, setShuttingDown] = useState(false)
   const [windows, setWindows] = useState<WindowState[]>([])
   const [theme, setTheme] = useState<ThemeState>(initialTheme)
@@ -238,6 +240,7 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
 
   return (
     <OSContext.Provider value={osValue}>
+      {poweringOn && <CrtPowerOn onDone={() => setPoweringOn(false)} />}
       {booted ? (
         <Desktop toasts={toasts} />
       ) : (

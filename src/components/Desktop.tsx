@@ -25,15 +25,32 @@ function loadPositions(): Record<string, { x: number; y: number }> {
 }
 
 function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: number }> {
-  const gap = 88
-  const cols = 3
+  // Deterministic scatter across the desktop (seeded by index) so icons feel
+  // placed, not piled in the corner. Avoids the taskbar (~bottom 44px) and the
+  // top-right SYSTEM RESUME panel.
   const startX = 16
   const startY = 16
+  const cellW = 116
+  const cellH = 104
+  const cols = Math.max(2, Math.min(4, Math.floor((typeof window !== 'undefined' ? window.innerWidth : 1280) / cellW)))
+  // Stable pseudo-random offsets so the layout looks scattered but consistent.
+  const jitter = (i: number) => {
+    const a = Math.sin((i + 1) * 12.9898) * 43758.5453
+    const b = Math.sin((i + 1) * 78.233) * 23421.631
+    return {
+      dx: (a - Math.floor(a) - 0.5) * (cellW - 96),
+      dy: (b - Math.floor(b) - 0.5) * (cellH - 80),
+    }
+  }
   const pos: Record<string, { x: number; y: number }> = {}
   items.forEach((item, i) => {
     const col = i % cols
     const row = Math.floor(i / cols)
-    pos[item.id] = { x: startX + col * gap, y: startY + row * (gap + 16) }
+    const { dx, dy } = jitter(i)
+    pos[item.id] = {
+      x: Math.max(startX, Math.round(startX + col * cellW + dx)),
+      y: Math.max(startY, Math.round(startY + row * cellH + dy)),
+    }
   })
   return pos
 }
@@ -108,7 +125,7 @@ export function Desktop({ toasts }: DesktopProps) {
 
   const cycleWallpaper = () => {
     const order: WallpaperId[] = [
-      'alpine', 'evergreen', 'nightcity', 'cosmos', 'prairie',
+      'studio', 'alpine', 'evergreen', 'nightcity', 'cosmos', 'prairie',
       'sunset', 'workspace', 'garage', 'classic', 'bliss',
     ]
     const idx = order.indexOf(theme.wallpaper)
@@ -127,7 +144,7 @@ export function Desktop({ toasts }: DesktopProps) {
       onContextMenu={onContextMenu}
       onClick={() => setMenu(null)}
     >
-      <Wallpaper id={theme.wallpaper} animate={theme.animations} className="absolute inset-0 h-full w-full" />
+      <Wallpaper id={theme.wallpaper} animate={theme.animations} accent={theme.accent} className="absolute inset-0 h-full w-full" />
 
       <div className="crt-flicker pointer-events-none absolute inset-0 z-0" />
 
