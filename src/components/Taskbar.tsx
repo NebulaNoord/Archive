@@ -16,7 +16,7 @@ export function Taskbar() {
 
   return (
     <>
-      <footer className="absolute inset-x-0 bottom-0 z-[9999] flex h-9 items-center gap-1 border-t-2 border-white bg-[#c0c0c0] px-1">
+      <footer className="absolute inset-x-0 bottom-0 z-[9999] flex h-9 items-center gap-1 border-t-2 border-white bg-[#c0c0c0]/85 px-1 backdrop-blur-[1px]">
         <button
           className={`win-btn flex h-7 items-center gap-1 win-pixel text-[9px] ${menuOpen ? 'pressed' : ''}`}
           onClick={() => setMenuOpen((open) => !open)}

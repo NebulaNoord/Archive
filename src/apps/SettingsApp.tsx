@@ -11,12 +11,13 @@ const wallpapers: { id: WallpaperId; label: string; emoji: string }[] = [
   { id: 'cosmos', label: 'Cosmos', emoji: '🌌' },
   { id: 'prairie', label: 'Prairie', emoji: '🌾' },
   { id: 'sunset', label: 'Sunset', emoji: '🌇' },
+  { id: 'snow', label: 'Snow', emoji: '❄️' },
   { id: 'workspace', label: 'Workspace', emoji: '💻' },
   { id: 'garage', label: 'Garage', emoji: '🏁' },
   { id: 'classic', label: 'Classic Teal', emoji: '🟦' },
   { id: 'bliss', label: 'Bliss 98', emoji: '🌄' },
 ]
-const accents = ['#ffd000', '#00a800', '#c00000', '#1084d0']
+const accents = ['#ffd000', '#00a800', '#c00000', '#1084d0', '#38bdf8', '#ff5d8f']
 
 export default function SettingsApp() {
   const { theme, setTheme, setWallpaper, achievements, audio, setAudio } = useOS()
@@ -73,6 +74,25 @@ export default function SettingsApp() {
         <button className="win-btn text-left" onClick={() => setAudio((a) => ({ enabled: !a.enabled }))}>
           SOUND: {audio.enabled ? 'ON' : 'OFF'}
         </button>
+        <button className="win-btn text-left" onClick={() => setTheme((c) => ({ ...c, pixelCursor: !c.pixelCursor }))}>
+          CURSOR: {theme.pixelCursor ? 'PIXEL' : 'DEFAULT'}
+        </button>
+        <button className="win-btn text-left" onClick={() => setTheme((c) => ({ ...c, crt: !c.crt }))}>
+          CRT FX: {theme.crt ? 'ON' : 'OFF'}
+        </button>
+      </section>
+
+      <section className="win-raised p-2">
+        <div className="win-titlebar mb-2 px-2 py-1 font-bold">DYNAMIC DESKTOP</div>
+        <p className="mb-1 text-xs">Wallpaper reacts to time + weather. Force a season to test:</p>
+        <div className="flex gap-2">
+          {(['auto', 'winter'] as const).map((s) => (
+            <button key={s} className={`win-btn ${theme.seasonOverride === s ? 'pressed' : ''}`} onClick={() => setTheme((c) => ({ ...c, seasonOverride: s }))}>
+              {s === 'auto' ? 'AUTO (live)' : 'WINTER / SNOW'}
+            </button>
+          ))}
+        </div>
+        <p className="mt-1 text-[10px] text-[#808080]">Night → desktop darkens · Rain → wallpaper swaps · Dec/override → snow.</p>
       </section>
 
       <section className="win-raised p-2">

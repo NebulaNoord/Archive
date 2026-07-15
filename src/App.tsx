@@ -6,8 +6,9 @@ import { Desktop } from './components/Desktop'
 import { ShutDownScreen } from './components/ShutDownScreen'
 import { OSContext } from './contexts/OSContext'
 import { desktopItems } from './data/desktopItems'
-import { playBoot, playUiBlip, startAmbient, stopAmbient } from './lib/audio'
+import { playBoot, playClick } from './lib/audio'
 import { ACHIEVEMENTS } from './data/achievements'
+import { bootNotifications } from './data/lore'
 import type { AppId, AchievementId, AudioState, ThemeState, WallpaperId, WindowState } from './types'
 
 const KONAMI = [
@@ -43,6 +44,9 @@ const initialTheme: ThemeState = {
   accent: '#38bdf8',
   animations: true,
   developerMode: false,
+  seasonOverride: 'auto',
+  pixelCursor: false,
+  crt: true,
 }
 
 function App({ onExitRetro }: { onExitRetro?: () => void }) {
@@ -53,7 +57,7 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
   const [theme, setTheme] = useState<ThemeState>(initialTheme)
   const [audio, setAudio] = useState<AudioState>({ enabled: false })
   const [achievements, setAchievements] = useState<Record<AchievementId, boolean>>(loadAchievements)
-  const [toasts, setToasts] = useState<{ id: number; label: string }[]>([])
+  const [toasts, setToasts] = useState<{ id: number; label: string; open?: AppId }[]>([])
   const [konamiActive, setKonamiActive] = useState(false)
   const zCounter = useRef(10)
   const konami = useRef<string[]>([])
@@ -61,7 +65,6 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
   const openedSet = useRef<Set<AppId>>(new Set())
 
   const shutdown = useCallback(() => {
-    stopAmbient()
     setShuttingDown(true)
   }, [])
 
@@ -96,7 +99,7 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
   }, [])
 
   const openApp = useCallback(
-    (appId: AppId, opts?: { title?: string; content?: string }) => {
+    (appId: AppId, opts?: { title?: string; content?: string; fsPath?: string }) => {
       const app = appRegistry[appId]
       zCounter.current += 1
       const next = zCounter.current
@@ -123,10 +126,11 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
             maximized: false,
             anim: 'open',
             ...(opts?.content !== undefined ? { content: opts.content } as Partial<WindowState> : {}),
+            ...(opts?.fsPath !== undefined ? { fsPath: opts.fsPath } as Partial<WindowState> : {}),
           },
         ]
       })
-      playUiBlip(audio.enabled)
+      playClick(audio.enabled)
       openedSet.current.add(appId)
       if (appId === 'terminal') unlockRef.current('used-terminal')
       if (appId === 'arcade') {
@@ -178,15 +182,9 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
     unlock('first-boot')
   }, [unlock])
 
-  // Audio: start/stop ambient loop when toggled on (user gesture already happened)
+  // Audio: boot jingle when the user enables sound; otherwise silent.
   useEffect(() => {
-    if (audio.enabled) {
-      startAmbient()
-      playBoot()
-    } else {
-      stopAmbient()
-    }
-    return () => stopAmbient()
+    if (audio.enabled) playBoot(true)
   }, [audio.enabled])
 
   // Konami code listener
@@ -247,6 +245,14 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
         <BootSequence
           onComplete={() => {
             setBooted(true)
+            // Fake inbox notifications land right after boot, like a real machine.
+            bootNotifications.forEach((n, i) => {
+              const tid = ++toastId.current
+              window.setTimeout(() => {
+                setToasts((items) => [...items, { id: tid, label: `📬 ${n.from}: ${n.subject}`, open: n.open }])
+                window.setTimeout(() => setToasts((items) => items.filter((t) => t.id !== tid)), 6000)
+              }, 900 + i * 1400)
+            })
           }}
         />
       )}

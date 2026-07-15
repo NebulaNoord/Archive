@@ -8,7 +8,7 @@ type OSContextValue = {
   setAudio: React.Dispatch<React.SetStateAction<AudioState>>
   windows: WindowState[]
   desktopItems: DesktopItem[]
-  openApp: (appId: AppId, opts?: { title?: string; content?: string }) => void
+  openApp: (appId: AppId, opts?: { title?: string; content?: string; fsPath?: string }) => void
   closeWindow: (windowId: string) => void
   minimizeWindow: (windowId: string) => void
   maximizeWindow: (windowId: string) => void

@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react'
 import { appRegistry } from '../apps/registry'
 import { useOS } from '../contexts/OSContext'
+import { playClose, playMinimize } from '../lib/audio'
 import type { WindowState } from '../types'
 
 type WindowFrameProps = {
@@ -8,7 +9,7 @@ type WindowFrameProps = {
 }
 
 export function WindowFrame({ windowState }: WindowFrameProps) {
-  const { closeWindow, focusWindow, maximizeWindow, minimizeWindow, updateWindow, theme, windows } = useOS()
+  const { closeWindow, focusWindow, maximizeWindow, minimizeWindow, updateWindow, theme, windows, audio } = useOS()
   const dragStart = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null)
   const app = appRegistry[windowState.appId]
   const AppComponent = app.component
@@ -85,13 +86,13 @@ export function WindowFrame({ windowState }: WindowFrameProps) {
             <h2 className="truncate text-sm font-bold leading-none">{windowState.title}</h2>
           </div>
           <div className="flex items-center gap-1">
-            <button className="win-btn h-5 w-5 p-0 text-xs leading-none" aria-label="Minimize window" onClick={() => minimizeWindow(windowState.id)}>
+            <button className="win-btn h-5 w-5 p-0 text-xs leading-none" aria-label="Minimize window" onClick={() => { minimizeWindow(windowState.id); playMinimize(audio.enabled) }}>
               _
             </button>
             <button className="win-btn h-5 w-5 p-0 text-xs leading-none" aria-label="Maximize window" onClick={() => maximizeWindow(windowState.id)}>
               □
             </button>
-            <button className="win-btn h-5 w-5 p-0 text-xs leading-none" aria-label="Close window" onClick={() => closeWindow(windowState.id)}>
+            <button className="win-btn h-5 w-5 p-0 text-xs leading-none" aria-label="Close window" onClick={() => { closeWindow(windowState.id); playClose(audio.enabled) }}>
               ×
             </button>
           </div>

@@ -509,6 +509,41 @@ function Studio({ animate, accent = '#38bdf8' }: { animate?: boolean; accent?: s
   )
 }
 
+/* ============================== SNOW (Winter) ============================== */
+function Snow({ animate }: { animate?: boolean; accent?: string }) {
+  const flakes = Array.from({ length: 60 }, (_, i) => ({
+    x: (i * 53) % 160,
+    y: (i * 37) % 100,
+    d: (i % 5) + 2,
+    delay: (i % 10) * 0.3,
+  }))
+  return (
+    <svg className="h-full w-full" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <linearGradient id="snow-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#9fb8d6" />
+          <stop offset="100%" stopColor="#dfe9f5" />
+        </linearGradient>
+      </defs>
+      <rect width="160" height="100" fill="url(#snow-bg)" />
+      <rect y="78" width="160" height="22" fill="#fff" />
+      {flakes.map((f, i) => (
+        <rect
+          key={i}
+          x={f.x}
+          y={f.y}
+          width={f.d * 0.4}
+          height={f.d * 0.4}
+          fill="#fff"
+          opacity="0.9"
+          className={animate ? 'snow-fall' : ''}
+          style={{ animationDelay: `${f.delay}s` }}
+        />
+      ))}
+    </svg>
+  )
+}
+
 const scenes: Record<WallpaperId, (p: { animate?: boolean; accent?: string }) => ReactElement> = {
   classic: Classic,
   bliss: Bliss,
@@ -521,6 +556,7 @@ const scenes: Record<WallpaperId, (p: { animate?: boolean; accent?: string }) =>
   workspace: Workspace,
   garage: Garage,
   studio: Studio,
+  snow: Snow,
 }
 
 /**

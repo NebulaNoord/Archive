@@ -181,6 +181,18 @@ export function WorkspaceIcon({ size = 32, style }: IconProps) {
   )
 }
 
+export function MusicIcon({ size = 32, style }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" style={{ ...base(size), ...style }} aria-hidden>
+      <rect x="2" y="2" width="12" height="12" fill="#1e1e2e" stroke="#000" />
+      <rect x="5" y="3" width="2" height="8" fill="#ff5d8f" stroke="#000" />
+      <rect x="10" y="3" width="2" height="8" fill="#38bdf8" stroke="#000" />
+      <rect x="4" y="11" width="4" height="2" fill="#fff" />
+      <rect x="9" y="11" width="4" height="2" fill="#fff" />
+    </svg>
+  )
+}
+
 export function RecycleIcon({ size = 32, style }: IconProps) {
   return (
     <svg viewBox="0 0 16 16" style={{ ...base(size), ...style }} aria-hidden>

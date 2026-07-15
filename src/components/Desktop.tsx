@@ -3,14 +3,39 @@ import { appRegistry } from '../apps/registry'
 import { useOS } from '../contexts/OSContext'
 import { useClock } from '../hooks/useClock'
 import { usePerformanceStats } from '../hooks/usePerformanceStats'
+import { useDynamicDesktop, resolveWallpaper } from '../hooks/useDynamicDesktop'
+import { playClick } from '../lib/audio'
 import { Wallpaper } from './Wallpaper'
 import { Taskbar } from './Taskbar'
 import { WindowFrame } from './WindowFrame'
-import type { DesktopItem, WallpaperId } from '../types'
+import type { DesktopItem, WallpaperId, AppId } from '../types'
 import { ACHIEVEMENT_LABELS } from '../data/achievements'
 
 type DesktopProps = {
-  toasts: { id: number; label: string }[]
+  toasts: { id: number; label: string; open?: AppId }[]
+}
+
+function FolderIconColored({ tint = '#ffd000' }: { tint?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" width={44} height={44} shapeRendering="crispEdges" aria-hidden>
+      <rect x="1" y="3" width="6" height="2" fill={tint} stroke="#000" />
+      <rect x="1" y="4" width="14" height="10" fill={tint} stroke="#000" />
+      <rect x="2" y="6" width="12" height="7" fill="#fff3c4" />
+    </svg>
+  )
+}
+
+function ShortcutIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width={44} height={44} shapeRendering="crispEdges" aria-hidden>
+      <rect x="1" y="3" width="6" height="2" fill="#ffd000" stroke="#000" />
+      <rect x="1" y="4" width="14" height="10" fill="#ffd000" stroke="#000" />
+      <rect x="2" y="6" width="12" height="7" fill="#fff3c4" />
+      <path d="M9 1 h5 v5 z" fill="#fff" stroke="#000" />
+      <rect x="11" y="3" width="3" height="1" fill="#000" />
+      <rect x="13" y="2" width="1" height="3" fill="#000" />
+    </svg>
+  )
 }
 
 const POS_KEY = 'archive-icon-positions-v2'
@@ -83,9 +108,16 @@ function defaultPositions(items: DesktopItem[]): Record<string, { x: number; y: 
 }
 
 export function Desktop({ toasts }: DesktopProps) {
-  const { openApp, theme, windows, desktopItems, setWallpaper } = useOS()
+  const { openApp, theme, windows, desktopItems, setWallpaper, audio } = useOS()
   const { fps } = usePerformanceStats(theme.developerMode)
   const clock = useClock()
+  const { weather } = useDynamicDesktop(theme.seasonOverride)
+  const hour = new Date().getHours()
+  const effectiveWallpaper =
+    theme.animations
+      ? resolveWallpaper(theme.wallpaper, weather, hour)
+      : theme.wallpaper
+  const isNight = weather?.isNight ?? (hour < 6 || hour >= 19)
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null)
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>(() => ({
     ...defaultPositions(desktopItems),
@@ -104,11 +136,12 @@ export function Desktop({ toasts }: DesktopProps) {
 
   const handleItem = (item: DesktopItem) => {
     if (item.kind === 'app' && item.appId) {
-      openApp(item.appId)
+      openApp(item.appId, item.fsPath ? { fsPath: item.fsPath } : undefined)
     } else if (item.kind === 'file' && item.content != null) {
       openApp('notepad', { title: item.label, content: item.content })
+    } else if ((item.kind === 'link' || item.kind === 'folder') && item.fsPath) {
+      openApp('files', { title: 'File Explorer', fsPath: item.fsPath })
     }
-    // folders are decorative for now
   }
 
   const onPointerDownIcon = (e: React.PointerEvent, item: DesktopItem) => {
@@ -167,11 +200,15 @@ export function Desktop({ toasts }: DesktopProps) {
 
   return (
     <main
-      className="crt-screen relative h-svh overflow-hidden win-font"
+      className={`crt-screen relative h-svh overflow-hidden win-font ${theme.pixelCursor ? 'pixel-cursor' : ''} ${theme.crt ? 'crt-on' : ''}`}
       onContextMenu={onContextMenu}
       onClick={() => setMenu(null)}
     >
-      <Wallpaper id={theme.wallpaper} animate={theme.animations} accent={theme.accent} className="absolute inset-0 h-full w-full" />
+      <Wallpaper id={effectiveWallpaper} animate={theme.animations} accent={theme.accent} className="absolute inset-0 h-full w-full" />
+
+      {isNight && theme.animations && (
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[#0a0a2a]/35" />
+      )}
 
       <div className="crt-flicker pointer-events-none absolute inset-0 z-0" />
 
@@ -183,8 +220,9 @@ export function Desktop({ toasts }: DesktopProps) {
             ? appRegistry[item.appId].renderIcon({ size: 44 })
             : item.kind === 'file'
               ? appRegistry.notepad.renderIcon({ size: 44 })
-              : null
-        const folderColor = item.tint ?? '#ffd000'
+              : item.kind === 'folder'
+                ? <FolderIconColored tint={item.tint} />
+                : <ShortcutIcon />
         const isDragging = dragging.current?.id === item.id
         return (
           <button
@@ -198,11 +236,7 @@ export function Desktop({ toasts }: DesktopProps) {
           >
             <span className="rounded-md bg-black/35 p-1 ring-1 ring-white/15 backdrop-blur-[1px] drop-shadow-[2px_2px_0_#000]">
               {icon ?? (
-                <svg viewBox="0 0 16 16" width={44} height={44} shapeRendering="crispEdges" aria-hidden>
-                  <rect x="1" y="3" width="6" height="2" fill={folderColor} stroke="#000" />
-                  <rect x="1" y="4" width="14" height="10" fill={folderColor} stroke="#000" />
-                  <rect x="2" y="6" width="12" height="7" fill="#fff3c4" />
-                </svg>
+                <ShortcutIcon />
               )}
             </span>
             <span className="win-pixel rounded bg-[#000080] px-1.5 py-0.5 text-[11px] leading-tight text-white shadow-[1px_1px_0_#000] ring-1 ring-white/20">
@@ -266,12 +300,16 @@ export function Desktop({ toasts }: DesktopProps) {
         </ul>
       )}
 
-      {/* Achievement toasts */}
+      {/* Achievement + notification toasts */}
       <div className="pointer-events-none absolute bottom-12 left-1/2 z-[10000] flex -translate-x-1/2 flex-col items-center gap-1">
         {toasts.map((t) => (
-          <div key={t.id} className="win-raised win-pixel animate-[win-pop_0.3s_ease-out] px-3 py-2 text-[9px] text-black">
+          <button
+            key={t.id}
+            onClick={() => { if (t.open) { openApp(t.open); playClick(audio.enabled) } }}
+            className={`win-raised win-pixel animate-[win-pop_0.3s_ease-out] px-3 py-2 text-[9px] text-black ${t.open ? 'pointer-events-auto cursor-pointer hover:bg-[#000080] hover:text-white' : ''}`}
+          >
             {ACHIEVEMENT_LABELS[t.label as keyof typeof ACHIEVEMENT_LABELS] ?? t.label}
-          </div>
+          </button>
         ))}
       </div>
 
