@@ -213,6 +213,18 @@ export const musicTracks: MusicTrack[] = [
     ],
   },
   {
+    id: 'noble',
+    title: 'NOBLE',
+    artist: 'F3miii',
+    duration: 200,
+    file: '/music/noble.mp3',
+    wave: 'triangle',
+    notes: [
+      [146.83, 1], [220.0, 1], [293.66, 1], [220.0, 1],
+      [174.61, 1], [261.63, 1], [329.63, 1], [261.63, 1],
+    ],
+  },
+  {
     id: 'focus',
     title: 'Late Night Compile',
     artist: 'Kayden',

@@ -26,5 +26,11 @@ Thumbs.db
 .env
 .env.local
 
+# local music (never commit copyrighted audio)
+public/music/*.mp3
+public/music/*.wav
+public/music/*.ogg
+public/music/*.m4a
+
 # build artifact (regenerate with scripts/zip_dist.py)
 *.zip

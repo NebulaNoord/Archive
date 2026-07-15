@@ -41,6 +41,7 @@ export default function MediaPlayerApp() {
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1
   const [hasFile, setHasFile] = useState(true)
+  const [realDur, setRealDur] = useState<number | null>(null)
   const audioEl = useRef<HTMLAudioElement | null>(null)
   const stopSynth = useRef<null | (() => void)>(null)
   const track = musicTracks[index]
@@ -51,7 +52,8 @@ export default function MediaPlayerApp() {
     el.preload = 'auto'
     el.addEventListener('ended', () => { setPlaying(false); setProgress(1); setIndex((i) => (i + 1) % musicTracks.length); setPlaying(true) })
     el.addEventListener('timeupdate', () => setProgress(el.duration ? el.currentTime / el.duration : 0))
-    el.addEventListener('error', () => setHasFile(false))
+    el.addEventListener('loadedmetadata', () => setRealDur(el.duration || null))
+    el.addEventListener('error', () => { setHasFile(false); setRealDur(null) })
     el.addEventListener('canplay', () => setHasFile(true))
     audioEl.current = el
     return () => { el.pause(); el.src = '' }
@@ -80,10 +82,12 @@ export default function MediaPlayerApp() {
     setIndex((i) => (i + dir + musicTracks.length) % musicTracks.length)
     setProgress(0)
     setHasFile(true)
+    setRealDur(null)
     setPlaying(true)
   }
 
-  const now = progress * track.duration
+  const now = progress * (realDur ?? track.duration)
+  const total = realDur ?? track.duration
 
   return (
     <div className="flex h-full flex-col gap-3 bg-[#16162b] p-4 text-white">
@@ -98,7 +102,7 @@ export default function MediaPlayerApp() {
       <div className="win-sunken h-2 w-full bg-black">
         <div className="h-full bg-[#38bdf8]" style={{ width: `${Math.min(100, progress * 100)}%` }} />
       </div>
-      <p className="text-right text-[10px] text-[#9aa6ff]">{fmt(now)} / {fmt(track.duration)}</p>
+      <p className="text-right text-[10px] text-[#9aa6ff]">{fmt(now)} / {fmt(total)}</p>
 
       <div className="flex items-center justify-center gap-4 text-2xl">
         <button className="win-btn px-3 py-1 text-base" onClick={() => { playClick(audio.enabled); go(-1) }}>⏮</button>
@@ -111,7 +115,7 @@ export default function MediaPlayerApp() {
         {musicTracks.map((t, i) => (
           <button
             key={t.id}
-            onClick={() => { setPlaying(false); setIndex(i); setProgress(0); setHasFile(true); setPlaying(true); playClick(audio.enabled) }}
+            onClick={() => { setPlaying(false); setIndex(i); setProgress(0); setHasFile(true); setRealDur(null); setPlaying(true); playClick(audio.enabled) }}
             className={`flex w-full items-center justify-between px-2 py-1 text-left text-sm ${i === index ? 'bg-[#38bdf8] text-black' : 'hover:bg-white/10'}`}
           >
             <span className="truncate">{t.title}</span>
