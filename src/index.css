@@ -355,6 +355,46 @@ select {
   box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
 }
 
+/* ===== Boot: cinematic power-on ===== */
+@keyframes boot-flash-anim {
+  0% { opacity: 0; transform: scale(1.4); }
+  18% { opacity: 1; transform: scale(1); }
+  82% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.boot-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, #fff 0%, #fff 40%, transparent 100%);
+  animation: boot-flash-anim 0.36s ease-out forwards;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes boot-title-anim {
+  0% { opacity: 0; letter-spacing: 0.5em; filter: blur(8px); transform: translateY(8px); }
+  100% { opacity: 1; letter-spacing: 0.04em; filter: blur(0); transform: translateY(0); }
+}
+.boot-title { animation: boot-title-anim 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+@keyframes boot-logo-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.boot-logo { animation: boot-logo-in 0.5s ease-out forwards; text-align: center; }
+
+@keyframes boot-bar-anim {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+.boot-bar {
+  height: 3px;
+  width: 0;
+  margin: 0 auto;
+  background: linear-gradient(90deg, #38bdf8, #ff5d8f);
+  box-shadow: 0 0 12px #38bdf8;
+  animation: boot-bar-anim 1.3s ease-in-out forwards;
+}
+
 /* ===== CRT ambient flicker + scanline noise ===== */
 .crt-flicker {
   background: rgba(255, 255, 255, 0.015);

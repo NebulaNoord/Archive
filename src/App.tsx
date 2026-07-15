@@ -243,6 +243,7 @@ function App({ onExitRetro }: { onExitRetro?: () => void }) {
         <Desktop toasts={toasts} />
       ) : (
         <BootSequence
+          soundOn={audio.enabled}
           onComplete={() => {
             setBooted(true)
             // Fake inbox notifications land right after boot, like a real machine.

@@ -177,6 +177,42 @@ who reads other people's Notes.txt. Respect.`
 
 export const musicTracks: MusicTrack[] = [
   {
+    id: 'swimming-pools',
+    title: 'Swimming Pools (Drank)',
+    artist: 'Kendrick Lamar',
+    duration: 245,
+    file: '/music/swimming-pools.mp3',
+    wave: 'triangle',
+    notes: [
+      [130.81, 2], [196.0, 2], [261.63, 2], [196.0, 2],
+      [174.61, 2], [220.0, 2], [261.63, 2], [196.0, 2],
+    ],
+  },
+  {
+    id: 'champion',
+    title: 'Champion',
+    artist: 'Kanye West',
+    duration: 233,
+    file: '/music/champion.mp3',
+    wave: 'sawtooth',
+    notes: [
+      [146.83, 1], [220.0, 1], [293.66, 1], [220.0, 1],
+      [174.61, 1], [261.63, 1], [349.23, 1], [261.63, 1],
+    ],
+  },
+  {
+    id: 'hood-gone-love-it',
+    title: 'Hood Gone Love It',
+    artist: 'Jay Rock ft. Kendrick Lamar',
+    duration: 234,
+    file: '/music/hood-gone-love-it.mp3',
+    wave: 'square',
+    notes: [
+      [110.0, 1], [164.81, 1], [220.0, 1], [164.81, 1],
+      [146.83, 1], [220.0, 1], [293.66, 1], [220.0, 1],
+    ],
+  },
+  {
     id: 'focus',
     title: 'Late Night Compile',
     artist: 'Kayden',
@@ -187,19 +223,6 @@ export const musicTracks: MusicTrack[] = [
       [392.0, 1], [329.63, 1], [293.66, 1], [261.63, 1],
       [261.63, 1], [392.0, 1], [523.25, 1], [659.25, 1],
       [523.25, 1], [392.0, 1], [329.63, 1], [261.63, 1],
-    ],
-  },
-  {
-    id: 'drive',
-    title: 'Highway 2AM',
-    artist: 'Kayden',
-    duration: 14,
-    wave: 'sawtooth',
-    notes: [
-      [220.0, 1], [277.18, 1], [329.63, 1], [440.0, 1],
-      [329.63, 1], [277.18, 1], [220.0, 1], [196.0, 1],
-      [220.0, 1], [329.63, 1], [440.0, 1], [554.37, 1],
-      [440.0, 1], [329.63, 1], [277.18, 1], [220.0, 1],
     ],
   },
   {

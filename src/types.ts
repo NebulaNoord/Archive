@@ -112,12 +112,10 @@ export type MusicTrack = {
   id: string
   title: string
   artist: string
-  /** seconds */
-  duration: number
-  /** a small melody as [freqHz, beats] pairs; played with Web Audio */
-  notes: [number, number][]
-  /** base waveform */
+  duration: number // seconds (synth loop length / shown for files)
+  notes: [number, number][] // [frequency Hz, beats] synth fallback
   wave?: OscillatorType
+  file?: string // optional real MP3 in /public/music — played if present
 }
 
 export type NotificationMessage = {
