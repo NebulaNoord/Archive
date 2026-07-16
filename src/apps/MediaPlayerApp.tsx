@@ -68,7 +68,10 @@ export default function MediaPlayerApp() {
       return
     }
     if (hasFile && el) {
-      el.play().catch(() => setHasFile(false))
+      // Prefer the real audio file. A play() rejection here is usually the
+      // autoplay policy, not a missing file — so don't downgrade to synth on
+      // it; the 'error' event (genuine 404/decode fail) is what flips hasFile.
+      el.play().catch(() => { /* autoplay blocked; will play on next gesture */ })
     } else {
       stopSynth.current = playSynth(index, () => { setPlaying(false); setProgress(1) })
     }
