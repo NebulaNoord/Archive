@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { projects, games, profile, process, services, trust, contact } from '../data/portfolio'
 import '../styles/editorial.css'
 import { Reveal } from './Reveal'
@@ -7,8 +7,6 @@ import { MouseTrail } from './MouseTrail'
 import { SideNav, Marquee, SectionHeading } from './SideNav'
 import { ProjectCard, Stat, Polaroid, CaseStudyModal } from './Cards'
 import { ContactForm } from './ContactForm'
-
-const ArchiveOS = lazy(() => import('../App'))
 
 function Hero() {
   return (
@@ -190,30 +188,6 @@ function Trust() {
   )
 }
 
-function RetroCTA({ onSwitch }: { onSwitch: () => void }) {
-  return (
-    <section className="relative px-6 py-32 text-center md:px-20">
-      <Reveal>
-        <p className="edi-tag text-[var(--accent)]">EXPERIENCE ANOTHER SIDE</p>
-        <h3 className="edi-display mx-auto mt-4 max-w-3xl text-[clamp(1.8rem,6vw,4rem)] leading-[0.95]">
-          NOT SURE THIS IS YOUR VIBE?
-        </h3>
-        <p className="mx-auto mt-4 max-w-md text-lg text-[var(--muted)]">
-          Switch to Retro OS Mode — a playful, nostalgic take on the same portfolio.
-        </p>
-        <div className="mt-8">
-          <button
-            onClick={onSwitch}
-            className="edi-tag edi-border bg-[var(--fg)] px-6 py-4 text-[var(--bg)] hover:bg-[var(--accent)]"
-          >
-            RETRO OS MODE →
-          </button>
-        </div>
-      </Reveal>
-    </section>
-  )
-}
-
 function Contact() {
   return (
     <section id="contact" className="relative px-6 py-32 md:px-20">
@@ -274,38 +248,11 @@ function Contact() {
 }
 
 export default function EditorialApp() {
-  const [retro, setRetro] = useState(false)
-  const [retroFromCTA, setRetroFromCTA] = useState(false)
-
-  // Lock document scroll only while the OS (RETRO) is mounted.
-  useEffect(() => {
-    document.body.classList.toggle('os-mode', retro)
-    return () => document.body.classList.remove('os-mode')
-  }, [retro])
-
-  if (retro) {
-    return (
-      <Suspense fallback={<div style={{ background: '#008080', height: '100vh' }} />}>
-        <ArchiveOS
-          onExitRetro={() => {
-            setRetro(false)
-            if (retroFromCTA) {
-              setRetroFromCTA(false)
-              requestAnimationFrame(() =>
-                document.getElementById('retro-cta')?.scrollIntoView({ behavior: 'smooth' }),
-              )
-            }
-          }}
-        />
-      </Suspense>
-    )
-  }
-
   return (
     <div className="edi-body relative min-h-screen w-full">
       <Noise />
       <MouseTrail />
-      <SideNav onRetro={() => setRetro(true)} />
+      <SideNav />
       <main>
         <Hero />
         <Marquee text="SELECTED WORK — NEBULANOORD — INDEPENDENT STUDIO —" />
@@ -315,9 +262,6 @@ export default function EditorialApp() {
         <Services />
         <Play />
         <Trust />
-        <section id="retro-cta">
-          <RetroCTA onSwitch={() => { setRetroFromCTA(true); setRetro(true) }} />
-        </section>
         <Contact />
         <Footer />
       </main>

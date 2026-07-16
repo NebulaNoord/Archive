@@ -8,7 +8,7 @@ const SECTIONS = [
   { id: 'contact', label: 'Contact' },
 ]
 
-export function SideNav({ onRetro }: { onRetro: () => void }) {
+export function SideNav() {
   const [active, setActive] = useState('top')
 
   useEffect(() => {
@@ -35,14 +35,6 @@ export function SideNav({ onRetro }: { onRetro: () => void }) {
             {s.label}
           </a>
         ))}
-        <button
-          onClick={onRetro}
-          title="Enter the Archive (retro mode)"
-          className="edi-tag mt-2 border-2 border-[var(--accent)] px-1 py-2 text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
-          style={{ writingMode: 'vertical-rl' } as React.CSSProperties}
-        >
-          RETRO
-        </button>
       </nav>
     </>
   )
