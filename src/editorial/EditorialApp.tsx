@@ -5,7 +5,7 @@ import { Reveal } from './Reveal'
 import { Noise } from './Noise'
 import { MouseTrail } from './MouseTrail'
 import { SideNav, Marquee, SectionHeading } from './SideNav'
-import { ProjectCard, Stat, Polaroid, CaseStudyModal } from './Cards'
+import { ProjectCard, Stat, CaseStudyModal } from './Cards'
 import { ContactForm } from './ContactForm'
 
 function Hero() {
@@ -236,12 +236,6 @@ function Contact() {
 
       <ContactForm />
 
-      <div className="mt-16 flex flex-wrap gap-6">
-        <Polaroid emoji="🏎️" caption="HOT WHEELS" rotate={-4} />
-        <Polaroid emoji="🏔️" caption="ALBERTA" rotate={3} />
-        <Polaroid emoji="🏎️" caption="F1 SUNDAY" rotate={-2} />
-        <Polaroid emoji="🌆" caption="LATE NIGHT CODE" rotate={5} />
-      </div>
       <Marquee text="THANKS FOR VISITING — NEBULANOORD — ARCHIVE —" />
     </section>
   )
