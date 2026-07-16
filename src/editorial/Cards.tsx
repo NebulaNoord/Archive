@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 type ProjectCardProps = {
   name: string
   tagline: string
@@ -68,6 +70,23 @@ type CaseStudy = {
 }
 
 export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClose: () => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const lastFocused = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    lastFocused.current = document.activeElement as HTMLElement
+    closeRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      lastFocused.current?.focus()
+    }
+  }, [onClose])
+
   const rows: [string, string][] = [
     ['Goal', project.goal],
     ['Challenge', project.challenge],
@@ -94,6 +113,7 @@ export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClo
           </div>
           <button
             type="button"
+            ref={closeRef}
             onClick={onClose}
             className="edi-tag edi-border px-3 py-2 hover:bg-[var(--accent)] hover:text-[var(--accent-ink)]"
             aria-label="Close"
@@ -155,7 +175,7 @@ export function CaseStudyModal({ project, onClose }: { project: CaseStudy; onClo
         <a
           href={project.link}
           target="_blank"
-          rel="noreferrer"
+          rel="noreferrer noopener"
           className="edi-tag edi-border mt-7 inline-block bg-[var(--accent)] px-5 py-3 text-[var(--accent-ink)] hover:bg-[var(--fg)]"
         >
           {project.evolution ? 'VISIT VERSION 1 →' : 'VISIT LIVE SITE →'}

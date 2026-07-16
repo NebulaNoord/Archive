@@ -153,7 +153,7 @@ function Play() {
               <a
                 href={g.link}
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
                 className="edi-hover edi-border flex items-center justify-between bg-white p-6"
               >
                 <div>
@@ -227,7 +227,7 @@ function Contact() {
         <a
           href={contact.github}
           target="_blank"
-          rel="noreferrer"
+          rel="noreferrer noopener"
           className="edi-tag edi-border px-4 py-2 hover:bg-[var(--secondary)]"
         >
           GITHUB ↗
